@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "baseUrl": "." /* Base directory to resolve non-absolute module names. */,
+    "baseUrl": "./",
     "paths": {
-      "@Assets/*": ["./src/Assets/*"],
-      "@Screens/*": ["./src/Screens/*"],
-      "@Components/*": ["./src/Components/*"],
-      "@Theme/*": ["./src/Theme/*"],
-      "@Utils/*": ["./src/Utils/*"],
-      "@Types": ["src/@Types"]
+      "@Assets/*":["./src/Assets/*"],
+      "@Screens/*":["./src/Screens/*"],
+      "@Theme/*":["./src/Theme/*"],
+      "@Hooks/*":["./src/Hooks/*"],
+      "@Components/*":["./src/Components/*"],
+      "@Utils/*":["./src/Utils/*"],
+      "@Types/*":["./src/@Types/*"],
     },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,

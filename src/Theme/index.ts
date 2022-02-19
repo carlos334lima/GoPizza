@@ -16,6 +16,7 @@ export default {
 
     ALERT_900: "#B27F00",
     ALERT_800: "#C5941A",
+    ALERT_700: "#FFFF00",
     ALERT_50: "#F3EFE5",
 
     SHAPE: "#DCDCDC",

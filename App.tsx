@@ -1,14 +1,24 @@
-import React from 'react';
-import Theme from "./src/Theme";
-import { StatusBar, View } from "react-native";
+import React from "react";
+import { StatusBar } from "react-native";
+
+//@libraries
 import { ThemeProvider } from "styled-components/native";
+
+//@screens
+import { SignIn } from "./src/Screens/SignIn";
+
+//@style
+import Theme from "./src/Theme";
 
 export default function App() {
   return (
     <ThemeProvider theme={Theme}>
-      <StatusBar style="light" translucent backgroundColor="transparent" />
-
-      <View />
+      <StatusBar
+        translucent
+        barStyle={"light-content"}
+        backgroundColor="transparent"
+      />
+      <SignIn />
     </ThemeProvider>
   );
 }

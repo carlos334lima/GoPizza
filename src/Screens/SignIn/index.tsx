@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -37,6 +37,7 @@ import { useAuth } from "@Hooks/auth";
 import brandImg from "@Assets/brand.png";
 import { schemaLogin } from "@Utils/Schemas";
 import { TypeProps } from "@Types/interfaces";
+import { ForgotPasswordActionSheet } from "@Components/ActionSheet/ForgartPassword";
 
 type IRenderHookFormInput = TextInputProps & {
   name: string;
@@ -51,6 +52,7 @@ type IDataForm = FieldValues & {
 };
 
 const SignIn = () => {
+  const ActionSheetForgotPasswordRef = useRef<any | null>();
   const { signIn, isLogging } = useAuth();
 
   const {
@@ -70,7 +72,9 @@ const SignIn = () => {
     signIn(data?.email, data?.password);
   }
 
-  function handleForgotPassword() {}
+  function handleForgotPassword() {
+    ActionSheetForgotPasswordRef.current.show();
+  }
 
   function RenderHookFormInput(props: IRenderHookFormInput) {
     return (
@@ -164,6 +168,7 @@ const SignIn = () => {
         </Content>
       </KeyboardAvoidingView>
       <FlashMessage position="top" />
+      <ForgotPasswordActionSheet ref={ActionSheetForgotPasswordRef} />
     </LinearGradient>
   );
 };

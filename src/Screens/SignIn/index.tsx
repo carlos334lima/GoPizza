@@ -34,7 +34,7 @@ import FlashMessage from "react-native-flash-message";
 
 //@utils
 import { useAuth } from "@Hooks/auth";
-import brandImg from '@Assets/brand.png'
+import brandImg from "@Assets/brand.png";
 import { schemaLogin } from "@Utils/Schemas";
 import { TypeProps } from "@Types/interfaces";
 
@@ -51,7 +51,8 @@ type IDataForm = FieldValues & {
 };
 
 const SignIn = () => {
-  const {signIn, isLogging} = useAuth()
+  const { signIn, isLogging } = useAuth();
+
   const {
     control,
     handleSubmit,
@@ -111,7 +112,7 @@ const SignIn = () => {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <Content>
-        <Brand source={brandImg} />
+          <Brand source={brandImg} />
 
           <Title>Login</Title>
           <RenderHookFormInput
@@ -157,6 +158,7 @@ const SignIn = () => {
           <Button
             title="Confirmar"
             onPress={handleSubmit(handleConfirmDataForm)}
+            //onPress={signOut}
             isLoading={isLogging}
           />
         </Content>

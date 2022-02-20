@@ -28,7 +28,7 @@ export const Title = styled.Text`
 export const Brand = styled.Image.attrs({
   resizeMode: "contain",
 })`
-  height: 340px;
+  height: 300px;
   margin-top: 64px;
   margin-bottom: 32px;
 `;
@@ -51,9 +51,18 @@ export const PasswordWrapper = styled.View`
 `;
 
 export const ErrorMessageInput = styled.Text`
-  bottom: 10px;
+  bottom: 6px;
   margin: 3px 3px 0px 5px;
   font-family: ${Theme.FONTS.Roboto_Bold};
   color: ${Theme.COLORS.ALERT_700};
   font-size: 16px;
+`;
+
+export const SocialLoginButton = styled.TouchableOpacity`
+  width: 40px;
+  height: 40px;
+  background-color: ${Theme.COLORS.SUCCESS_50};
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
 `;

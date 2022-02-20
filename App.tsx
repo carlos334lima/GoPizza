@@ -7,18 +7,23 @@ import { ThemeProvider } from "styled-components/native";
 //@screens
 import { SignIn } from "./src/Screens/SignIn";
 
+//@utils
+import { AuthProvider } from "@Hooks/auth";
+
 //@style
 import Theme from "./src/Theme";
 
 export default function App() {
   return (
-    <ThemeProvider theme={Theme}>
-      <StatusBar
-        translucent
-        barStyle={"light-content"}
-        backgroundColor="transparent"
-      />
-      <SignIn />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider theme={Theme}>
+        <StatusBar
+          translucent
+          barStyle={"light-content"}
+          backgroundColor="transparent"
+        />
+        <SignIn />
+      </ThemeProvider>
+    </AuthProvider>
   );
 }

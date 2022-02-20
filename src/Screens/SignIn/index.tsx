@@ -29,9 +29,13 @@ import {
   Title,
 } from "./styles";
 
+//@libraries
+import FlashMessage from "react-native-flash-message";
+
 //@utils
-import { schemaLogin } from "@Utils/Schemas";
+import { useAuth } from "@Hooks/auth";
 import brandImg from '@Assets/brand.png'
+import { schemaLogin } from "@Utils/Schemas";
 import { TypeProps } from "@Types/interfaces";
 
 type IRenderHookFormInput = TextInputProps & {
@@ -42,11 +46,12 @@ type IRenderHookFormInput = TextInputProps & {
 };
 
 type IDataForm = FieldValues & {
-  email?: string;
-  password?: string;
+  email?: any;
+  password?: any;
 };
 
 const SignIn = () => {
+  const {signIn, isLogging} = useAuth()
   const {
     control,
     handleSubmit,
@@ -61,7 +66,7 @@ const SignIn = () => {
   const IconIsVisible = !isSecretPasswordVisible ? "eye" : "eye-off";
 
   function handleConfirmDataForm(data: IDataForm) {
-    console.log("data", data);
+    signIn(data?.email, data?.password);
   }
 
   function handleForgotPassword() {}
@@ -152,9 +157,11 @@ const SignIn = () => {
           <Button
             title="Confirmar"
             onPress={handleSubmit(handleConfirmDataForm)}
+            isLoading={isLogging}
           />
         </Content>
       </KeyboardAvoidingView>
+      <FlashMessage position="top" />
     </LinearGradient>
   );
 };

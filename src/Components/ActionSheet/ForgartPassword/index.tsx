@@ -1,64 +1,123 @@
+import React, { forwardRef } from "react";
+import { View } from "react-native";
+
+//@components
 import { Input } from "@Components/Input";
-import Theme from "@Theme/index";
-import React, { ForwardedRef, forwardRef } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
 
 //@libraries
+import { yupResolver } from "@hookform/resolvers/yup";
 import { ActionSheetCustom } from "react-native-actionsheet";
-import { getBottomSpace } from "react-native-iphone-x-helper";
+import { useForm, Controller, Control, FieldValues } from "react-hook-form";
 
-const ForgotPasswordActionSheet = forwardRef<ForwardedRef<unknown>>(
-  (props, ref) => {
+//@styles
+import Theme from "@Theme/index";
+import {
+  ButtonText,
+  ButtonWrapper,
+  ContentText,
+  ContentWrapper,
+  stylesForgotPasswordActionSheet,
+  WarningText,
+  ErrorMessageInput,
+} from "./styles";
+
+//@utils
+import { schemaForgotPassword } from "@Utils/Schemas";
+
+type IForgotPasswordActionSheet = {
+  onPressConfirm: (email: any | string) => void;
+  onPressCancel: () => void;
+};
+
+type IRenderInputHookForm = {
+  error: string;
+  control: Control<FieldValues, object>;
+};
+
+const ForgotPasswordActionSheet = forwardRef(
+  (props: IForgotPasswordActionSheet, ref) => {
+    const {
+      control,
+      handleSubmit,
+      formState: { errors },
+      reset,
+    } = useForm({
+      resolver: yupResolver(schemaForgotPassword),
+    });
+
+    function handlePressConfirmEmail(email: string) {
+      props.onPressConfirm(email);
+      reset();
+    }
+
+    function handlePressCancel() {
+      props.onPressCancel();
+      reset();
+    }
+
     function RenderButtonConfirm() {
       return (
-        <TouchableOpacity
-          style={{
-            width: "90%",
-            height: "70%",
-            backgroundColor: Theme.COLORS.PRIMARY_800,
-            borderRadius: 20,
-            alignItems: "center",
-            justifyContent: 'center',
-            marginBottom: 10
-          }}
+        <ButtonWrapper
+          style={{ backgroundColor: Theme.COLORS.SUCCESS_900 }}
+          onPress={handleSubmit(handlePressConfirmEmail as any)}
         >
-          <Text>Confirmar</Text>
-        </TouchableOpacity>
+          <ButtonText>Confirmar</ButtonText>
+        </ButtonWrapper>
       );
     }
 
-    function RenderTitle() {
+    function RenderButtonCancel() {
       return (
-        <View
-          style={{
-            width: "100%",
-            height: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 20,
-              fontFamily: Theme.FONTS.DM_Sans,
-              marginBottom: 30,
-            }}
-          >
-            Insira seu e-mail
-          </Text>
+        <ButtonWrapper onPress={handlePressCancel}>
+          <ButtonText>Cancelar</ButtonText>
+        </ButtonWrapper>
+      );
+    }
+
+    function RenderInputHookForm(props: IRenderInputHookForm) {
+      return (
+        <>
+          <Controller
+            name="email"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="E-mail *"
+                autoCapitalize="none"
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+          {<ErrorMessageInput>{props?.error}</ErrorMessageInput>}
+        </>
+      );
+    }
+
+    function RenderContent() {
+      return (
+        <ContentWrapper>
+          <ContentText>Insira seu e-mail</ContentText>
           <View style={{ width: "90%" }}>
-            <Input placeholder="E-mail *" />
+            <RenderInputHookForm
+              control={control}
+              error={errors.email && errors.email.message}
+            />
+            <WarningText>
+              Insira seu e-mail cadastrado para ser enviado o passo a passo para
+              redefinição de senha.
+            </WarningText>
           </View>
-        </View>
+        </ContentWrapper>
       );
     }
 
     return (
       <ActionSheetCustom
         ref={ref as any}
-        title={<RenderTitle />}
-        options={[<RenderButtonConfirm />, "Cancelar", ""]}
-        styles={stylesActionSheet}
+        title={<RenderContent />}
+        options={[<RenderButtonConfirm />, <RenderButtonCancel />, ""]}
+        styles={stylesForgotPasswordActionSheet}
         cancelButtonIndex={2}
         destructiveButtonIndex={1}
         onPress={(index) => {
@@ -70,27 +129,5 @@ const ForgotPasswordActionSheet = forwardRef<ForwardedRef<unknown>>(
     );
   }
 );
-
-export const stylesActionSheet = {
-  buttonBox: {
-    height: 80,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Theme.COLORS.SUCCESS_50,
-  },
-  buttonText: {
-    fontSize: 18,
-  },
-  titleBox: {
-    height: 240,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: Theme.COLORS.SUCCESS_50,
-  },
-  wrapper: {
-    flex: 1,
-    flexDirection: "row",
-  },
-};
 
 export { ForgotPasswordActionSheet };

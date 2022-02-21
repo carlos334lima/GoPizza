@@ -76,6 +76,16 @@ const SignIn = () => {
     ActionSheetForgotPasswordRef.current.show();
   }
 
+  //ActionSheet
+  function handleConfirmActionSheet(email: string) {
+    ActionSheetForgotPasswordRef.current.hide();
+    console.log("email", email);
+  }
+
+  function handleCancelActionSheet() {
+    ActionSheetForgotPasswordRef.current.hide();
+  }
+
   function RenderHookFormInput(props: IRenderHookFormInput) {
     return (
       <View style={{ width: "100%" }}>
@@ -168,7 +178,11 @@ const SignIn = () => {
         </Content>
       </KeyboardAvoidingView>
       <FlashMessage position="top" />
-      <ForgotPasswordActionSheet ref={ActionSheetForgotPasswordRef} />
+      <ForgotPasswordActionSheet
+        ref={ActionSheetForgotPasswordRef}
+        onPressConfirm={handleConfirmActionSheet}
+        onPressCancel={handleCancelActionSheet}
+      />
     </LinearGradient>
   );
 };

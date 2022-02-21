@@ -22,8 +22,6 @@ import {
   USER_COLLECTION,
 } from "@Utils/LocalStorage";
 
-
-
 type AuthContextData = {
   signIn: (email: string, password: string) => Promise<void>;
   isLogging: boolean;
@@ -114,8 +112,29 @@ function AuthProvider({ children }: AuthProviderProps) {
     setIsLogging(false);
   }
 
+  async function forgotPassword(email: string) {
+    if (email) {
+      auth()
+        .sendPasswordResetEmail(email)
+        .then(() => {
+          RenderMessageTop(
+            "Enviamos um link para o seu e-mail",
+            TypeShowMessage.sucesso
+          );
+        })
+        .catch(() => {
+          RenderMessageTop(
+            "Não foi possível enviar o link para o seu e-mail",
+            TypeShowMessage.erro
+          );
+        });
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ signIn, signOut, isLogging, user }}>
+    <AuthContext.Provider
+      value={{ signIn, signOut, forgotPassword, isLogging, user }}
+    >
       {children}
     </AuthContext.Provider>
   );

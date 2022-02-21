@@ -1,6 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
+  LogBox,
   Platform,
   TextInputProps,
   TouchableOpacity,
@@ -32,12 +33,14 @@ import {
 //@libraries
 import FlashMessage from "react-native-flash-message";
 
+//@components
+import { ForgotPasswordActionSheet } from "@Components/ActionSheet/ForgartPassword";
+
 //@utils
 import { useAuth } from "@Hooks/auth";
 import brandImg from "@Assets/brand.png";
 import { schemaLogin } from "@Utils/Schemas";
 import { TypeProps } from "@Types/interfaces";
-import { ForgotPasswordActionSheet } from "@Components/ActionSheet/ForgartPassword";
 
 type IRenderHookFormInput = TextInputProps & {
   name: string;
@@ -53,7 +56,11 @@ type IDataForm = FieldValues & {
 
 const SignIn = () => {
   const ActionSheetForgotPasswordRef = useRef<any | null>();
-  const { signIn, isLogging } = useAuth();
+  const { signIn, forgotPassword, isLogging } = useAuth();
+
+  useEffect(() => {
+    LogBox.ignoreLogs(["Animated: `useNativeDriver`"]);
+  }, []);
 
   const {
     control,
@@ -77,9 +84,9 @@ const SignIn = () => {
   }
 
   //ActionSheet
-  function handleConfirmActionSheet(email: string) {
+  function handleConfirmActionSheet(data: IDataForm) {
     ActionSheetForgotPasswordRef.current.hide();
-    console.log("email", email);
+    forgotPassword(data.email);
   }
 
   function handleCancelActionSheet() {

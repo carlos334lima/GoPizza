@@ -59,7 +59,7 @@ const ForgotPasswordActionSheet = forwardRef(
       return (
         <ButtonWrapper
           style={{ backgroundColor: Theme.COLORS.SUCCESS_900 }}
-          onPress={handleSubmit(handlePressConfirmEmail as any)}
+          onPress={handleSubmit(props.onPressConfirm)}
         >
           <ButtonText>Confirmar</ButtonText>
         </ButtonWrapper>
@@ -121,8 +121,8 @@ const ForgotPasswordActionSheet = forwardRef(
         cancelButtonIndex={2}
         destructiveButtonIndex={1}
         onPress={(index) => {
-          if (index === 0) {
-            console.log("chegou");
+          if (index === 2) {
+            handlePressCancel()
           }
         }}
       />

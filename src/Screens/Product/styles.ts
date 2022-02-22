@@ -1,14 +1,15 @@
 import styled, { css } from "styled-components/native";
 import { getStatusBarHeight } from "react-native-iphone-x-helper";
+import LinearGradient from "react-native-linear-gradient";
 
-import { Button } from '@Components/Button'
+import { Button } from '@Components/Buttons/Button'
 
 export const Container = styled.KeyboardAvoidingView`
   flex: 1;
   background-color: ${({ theme }) => theme.COLORS.BACKGROUND};
 `;
 
-export const Header = styled(LinearGradient).attrs(({ theme }) => ({
+ export const Header = styled(LinearGradient).attrs(({ theme }) => ({
   colors: theme.COLORS.GRADIENT,
 }))`
   width: 100%;
@@ -16,7 +17,7 @@ export const Header = styled(LinearGradient).attrs(({ theme }) => ({
   align-items: center;
   justify-content: space-between;
   padding: ${getStatusBarHeight() + 33}px 20px 24px;
-`;
+`; 
 
 export const Title = styled.Text`
   font-size: 24px;

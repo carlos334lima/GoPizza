@@ -16,7 +16,7 @@ import { useForm, Controller, Control, FieldValues } from "react-hook-form";
 
 //@components
 import { Input } from "@Components/Input";
-import { Button } from "@Components/Button";
+import { Button } from "@Components/Buttons/Button";
 
 //@styles
 import Theme from "@Theme/index";

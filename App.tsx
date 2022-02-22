@@ -6,6 +6,7 @@ import { ThemeProvider } from "styled-components/native";
 
 //@screens
 import { SignIn } from "./src/Screens/SignIn";
+import { Product } from "@Screens/Product";
 
 //@utils
 import { AuthProvider } from "@Hooks/auth";
@@ -22,7 +23,7 @@ export default function App() {
           barStyle={"light-content"}
           backgroundColor="transparent"
         />
-        <SignIn />
+        <Product />
       </ThemeProvider>
     </AuthProvider>
   );

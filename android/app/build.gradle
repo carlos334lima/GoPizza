@@ -200,6 +200,13 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
+    //vector-icons
+    project.ext.vectoricons = [
+    iconFontNames: [ 'MaterialIcons.ttf', 'EvilIcons.ttf', 'MaterialCommunityIcons.ttf', 'Feather.ttf' ]
+    ]
+
+    apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
     }

@@ -74,33 +74,16 @@ const ForgotPasswordActionSheet = forwardRef(
       );
     }
 
-    function RenderInputHookForm(props: IRenderInputHookForm) {
-      return (
-        <>
-          <Controller
-            name="email"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <Input
-                placeholder="E-mail *"
-                autoCapitalize="none"
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-          />
-          {<ErrorMessageInput>{props?.error}</ErrorMessageInput>}
-        </>
-      );
-    }
-
     function RenderContent() {
       return (
         <ContentWrapper>
           <ContentText>Insira seu e-mail</ContentText>
           <View style={{ width: "90%" }}>
-            <RenderInputHookForm
+            <Input
+              name="email"
               control={control}
+              placeholder="E-mail *"
+              autoCapitalize="none"
               error={errors.email && errors.email.message}
             />
             <WarningText>
@@ -122,7 +105,7 @@ const ForgotPasswordActionSheet = forwardRef(
         destructiveButtonIndex={1}
         onPress={(index) => {
           if (index === 2) {
-            handlePressCancel()
+            handlePressCancel();
           }
         }}
       />

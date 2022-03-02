@@ -9,7 +9,7 @@ type Props = {
 
 export function Photo({ uri }: Props) {
   if (uri) {
-    return <Image source={{ uri }} />;
+    return <Image source={{ uri }} resizeMode="cover"/>;
   }
 
   return (

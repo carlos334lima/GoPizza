@@ -23,6 +23,8 @@ export function RenderMessageTop(message: string, type: MessageType) {
     type: type,
     duration: 2500,
     floating: true,
+    /* backgroundColor: Theme.COLORS.ALERT_900, */
+    statusBarHeight: 25,
     textStyle: { fontFamily: Theme.FONTS.Roboto_Bold },
     animated: true,
   });

@@ -1,18 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  KeyboardAvoidingView,
-  LogBox,
-  Platform,
-  TextInputProps,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { useRef, useState } from "react";
+import { KeyboardAvoidingView, Platform, TouchableOpacity } from "react-native";
 
 //@libraries
 import { yupResolver } from "@hookform/resolvers/yup";
 import LinearGradient from "react-native-linear-gradient";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useForm, Controller, Control, FieldValues } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 
 //@components
 import { Input } from "@Components/Input";
@@ -23,7 +16,6 @@ import Theme from "@Theme/index";
 import {
   Brand,
   Content,
-  ErrorMessageInput,
   ForgotPasswordButton,
   ForgotPasswordLabel,
   PasswordWrapper,
@@ -40,14 +32,6 @@ import { ForgotPasswordActionSheet } from "@Components/ActionSheet/ForgartPasswo
 import { useAuth } from "@Hooks/auth";
 import brandImg from "@Assets/brand.png";
 import { schemaLogin } from "@Utils/Schemas";
-import { TypeProps } from "@Types/interfaces";
-
-type IRenderHookFormInput = TextInputProps & {
-  name: string;
-  type: TypeProps;
-  error: string;
-  control: Control<FieldValues, object>;
-};
 
 type IDataForm = FieldValues & {
   email?: any;
@@ -57,10 +41,6 @@ type IDataForm = FieldValues & {
 const SignIn = () => {
   const ActionSheetForgotPasswordRef = useRef<any | null>();
   const { signIn, forgotPassword, isLogging } = useAuth();
-
-  useEffect(() => {
-    LogBox.ignoreLogs(["Animated: `useNativeDriver`"]);
-  }, []);
 
   const {
     control,
@@ -75,8 +55,8 @@ const SignIn = () => {
 
   const IconIsVisible = !isSecretPasswordVisible ? "eye" : "eye-off";
 
-  function handleConfirmDataForm(data: IDataForm) {
-    signIn(data?.email, data?.password);
+  function handleConfirmDataForm({ email, password }: IDataForm) {
+    signIn(email, password);
   }
 
   function handleForgotPassword() {
@@ -84,39 +64,13 @@ const SignIn = () => {
   }
 
   //ActionSheet
-  function handleConfirmActionSheet(data: IDataForm) {
+  function handleConfirmActionSheet({ email }: IDataForm) {
     ActionSheetForgotPasswordRef.current.hide();
-    forgotPassword(data.email);
+    forgotPassword(email);
   }
 
   function handleCancelActionSheet() {
     ActionSheetForgotPasswordRef.current.hide();
-  }
-
-  function RenderHookFormInput(props: IRenderHookFormInput) {
-    return (
-      <View style={{ width: "100%" }}>
-        <Controller
-          name={props.name}
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, value } }) => (
-            <Input
-              placeholder={props?.placeholder}
-              type={props?.type}
-              autoCorrect={props?.autoCorrect}
-              autoCapitalize={props?.autoCapitalize}
-              onChangeText={onChange}
-              value={value}
-              secureTextEntry={props?.secureTextEntry}
-            />
-          )}
-        />
-        {<ErrorMessageInput>{props?.error}</ErrorMessageInput>}
-      </View>
-    );
   }
 
   return (
@@ -136,23 +90,23 @@ const SignIn = () => {
           <Brand source={brandImg} />
 
           <Title>Login</Title>
-          <RenderHookFormInput
+          <Input
             name="email"
+            control={control}
             placeholder="E-mail *"
             type="secondary"
             autoCorrect={false}
             autoCapitalize="none"
             secureTextEntry={false}
-            control={control}
             error={errors.email && errors.email.message}
           />
           <PasswordWrapper>
-            <RenderHookFormInput
+            <Input
               name="password"
+              control={control}
               placeholder="Senha *"
               type="secondary"
               secureTextEntry={isSecretPasswordVisible as any}
-              control={control}
               error={errors.password && errors.password.message}
             />
             <TouchableOpacity

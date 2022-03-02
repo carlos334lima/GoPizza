@@ -6,6 +6,7 @@ import styled, { css } from "styled-components/native";
 
 type Props = {
   type: TypeProps;
+  error: string;
 };
 
 export const Container = styled(TextInput).attrs<Props>(({ theme, type }) => ({
@@ -18,10 +19,10 @@ export const Container = styled(TextInput).attrs<Props>(({ theme, type }) => ({
   font-size: 14px;
   padding: 7px 0;
   padding-left: 20px;
-  margin-bottom: 5px;
-  ${({ theme, type }) => css`
+  margin-bottom: 15px;
+  ${({ theme, type, error }) => css`
     font-family: ${theme.FONTS.DM_Sans};
-    border: 1px solid ${theme.COLORS.SHAPE};
+    border: 1px solid ${error ? theme.COLORS.ALERT_900 : theme.COLORS.SHAPE};
     color: ${type === "primary"
       ? theme.COLORS.SECONDARY_900
       : theme.COLORS.TITLE};

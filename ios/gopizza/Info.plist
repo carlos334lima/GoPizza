@@ -35,6 +35,14 @@
 			</dict>
 		</dict>
 	</dict>
+
+	<!-- location | camera -->
+	<key>NSCameraUsageDescription</key>
+	<string>Permite que você tire fotos de dentro do aplicativo (ex: foto do perfil, imagem do cartão de crédito).</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Permitir que a GoPizza acesse seu álbum de fotos para fazer uploads no app.</string>
+
+
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
 	<key>UILaunchStoryboardName</key>

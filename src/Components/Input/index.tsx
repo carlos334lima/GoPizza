@@ -1,14 +1,17 @@
 import React from "react";
 import { TextInputProps, View } from "react-native";
 
+//@libraries
+import { Control, Controller } from "react-hook-form";
+
+//@components
+import { RenderMessageTop } from "@Components/MessageInfo";
+
 //@types
 import { TypeProps } from "@Types/interfaces";
 
 //@styles
 import { Container } from "./styles";
-import { Control, Controller } from "react-hook-form";
-import { ErrorMessageInput } from "@Screens/SignIn/styles";
-import { RenderMessageTop } from "@Components/MessageInfo";
 
 type Props = TextInputProps & {
   type?: TypeProps;

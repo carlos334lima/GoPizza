@@ -23,7 +23,7 @@ export default function App() {
           barStyle={"light-content"}
           backgroundColor="transparent"
         />
-        <SignIn />
+        <Product />
       </ThemeProvider>
     </AuthProvider>
   );

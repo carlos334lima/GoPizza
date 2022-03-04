@@ -13,7 +13,7 @@ export const helpers = {
       RenderMessageTop("Houve um erro em carregar sua imagem!", "danger");
     }
 
-    return assets[0]?.uri;
+    return assets[0]?.uri; 
   },
 
   handleOpenCamera: async () => {
@@ -36,5 +36,14 @@ export const helpers = {
     });
 
     return masked;
+  },
+
+  formartUnmasked: (value: string) => {
+    const { unmasked } = formatWithMask({
+      text: value,
+      mask: Masks.BRL_CURRENCY,
+    });
+
+    return unmasked;
   },
 };

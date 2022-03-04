@@ -4,12 +4,14 @@ import { TextInputProps } from "react-native";
 //@libraries
 import { Control, Controller, FieldValues } from "react-hook-form";
 
+//@components
+import { RenderMessageTop } from "@Components/MessageInfo";
+
 //@utils
 import { helpers } from "@Utils/Helpers";
 
 //@styles
 import { Container, Size, Label, Input } from "./styles";
-import { RenderMessageTop } from "@Components/MessageInfo";
 
 type Props = TextInputProps & {
   size: string;

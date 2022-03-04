@@ -8,11 +8,24 @@ import {
 } from "react-native";
 
 //@libraries
-import firestore from "@react-native-firebase/firestore";
+import { useForm } from "react-hook-form";
 import storage from "@react-native-firebase/storage";
-import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import { yupResolver } from "@hookform/resolvers/yup";
+import FlashMessage from "react-native-flash-message";
+import firestore from "@react-native-firebase/firestore";
 
 //@components
+import { Photo } from "@Components/Photo";
+import { Input } from "@Components/Input";
+import { InputPrice } from "@Components/InputPrice";
+import { Button } from "@Components/Buttons/Button";
+import { HideKeyboard } from "@Components/HideKeyboard";
+import { ButtonBack } from "@Components/Buttons/ButtonBack";
+import { OptionsImagePickerActionSheet } from "@Components/ActionSheet/OptionsImagePicker";
+
+//@utils
+import { helpers } from "@Utils/Helpers";
+import { schemaProduct } from "@Utils/Schemas";
 
 //@styles
 import {
@@ -24,25 +37,9 @@ import {
   Form,
   Label,
   InputGroup,
-  InputGroupHeader,
-  MaxCharacters,
   Header,
 } from "./styles";
-import LinearGradient from "react-native-linear-gradient";
-import Theme from "@Theme/index";
-import { getStatusBarHeight } from "react-native-iphone-x-helper";
-import { ButtonBack } from "@Components/Buttons/ButtonBack";
-import { Photo } from "@Components/Photo";
-import { OptionsImagePickerActionSheet } from "@Components/ActionSheet/OptionsImagePicker";
-import { helpers } from "@Utils/Helpers";
-import { InputPrice } from "@Components/InputPrice";
-import { Input } from "@Components/Input";
-import { useForm } from "react-hook-form";
-import { HideKeyboard } from "@Components/HideKeyboard";
-import { Button } from "@Components/Buttons/Button";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { schemaProduct } from "@Utils/Schemas";
-import FlashMessage from "react-native-flash-message";
+import { RenderMessageTop } from "@Components/MessageInfo";
 
 type IForm = {
   description?: string;
@@ -65,28 +62,68 @@ const Product = () => {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schemaProduct),
   });
 
   const optionsImagePickerActionSheetRef = useRef<any | null>();
 
-  const [image, setImage] = useState<Promise<any> | (() => Promise<any>)>("");
+  const [image, setImage] = useState<string>("");
 
   async function handlePressLoadLibraryPhotos() {
-    optionsImagePickerActionSheetRef.current.hide();
     const result = await helpers.handleOpenLibrary();
     setImage(result);
+     optionsImagePickerActionSheetRef.current.hide(); 
   }
 
   async function handlePressOpenCamera() {
-    optionsImagePickerActionSheetRef.current.hide();
+   /*  optionsImagePickerActionSheetRef.current.hide(); */
     await helpers.handleOpenCamera();
   }
 
-  function handleAddPizza(form: IForm) {
-    console.log("teste", form);
+  async function handleAddPizza({
+    name,
+    description,
+    sizeG,
+    sizeM,
+    sizeP,
+  }: IForm) {
+    const sizePUnmasked = helpers.formartUnmasked(sizeP);
+    const sizeMUnmasked = helpers.formartUnmasked(sizeM);
+    const sizeGUnmasked = helpers.formartUnmasked(sizeG);
+
+     if (!image) {
+      RenderMessageTop("Selecione uma imagem!", "danger");
+      return;
+    }
+
+    const fileName = `image${new Date().getTime()}`;
+    const reference = storage().ref(`/pizzasImages/${fileName}.png`);
+
+    await reference.putFile(image);
+    const photo_url = await reference.getDownloadURL();
+
+    firestore()
+      .collection("pizzas")
+      .add({
+        name,
+        name_insensitive: name?.toLowerCase().trim(),
+        description,
+        prices_sizes: {
+          p: sizePUnmasked,
+          m: sizeMUnmasked,
+          g: sizeGUnmasked,
+        },
+        photo_url,
+        photo_path: reference.fullPath,
+      })
+      .then(() => {
+        RenderMessageTop("Pizza cadastrada com sucesso!", "success");
+      })
+      .catch(() => {
+        RenderMessageTop("Não foi possível cadastrar a pizza!", "danger");
+      }); 
   }
 
   return (
@@ -158,7 +195,7 @@ const Product = () => {
             <Button
               title="Cadastrar Pizza"
               onPress={handleSubmit(handleAddPizza)}
-              /* isLoading={isLoading} */
+              isLoading={isSubmitting}
             />
           </Form>
         </ScrollView>

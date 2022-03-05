@@ -1,13 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Platform,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { Platform, TouchableOpacity, ScrollView } from "react-native";
 
 //@libraries
 import { useForm } from "react-hook-form";
-import storage from "@react-native-firebase/storage";
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import FlashMessage from "react-native-flash-message";
 
@@ -76,7 +72,6 @@ const Product = () => {
   }
 
   async function handlePressOpenCamera() {
-    /*  optionsImagePickerActionSheetRef.current.hide(); */
     await helpers.handleOpenCamera();
   }
 
@@ -96,11 +91,7 @@ const Product = () => {
       return;
     }
 
-    const fileName = `image${new Date().getTime()}`;
-    const reference = storage().ref(`/pizzasImages/${fileName}.png`);
-
-    await reference.putFile(image);
-    const photo_url = await reference.getDownloadURL();
+    const { fullPath, photo_url } = await helpers.savePhotoUrl(image);
 
     const data = {
       name,
@@ -112,7 +103,7 @@ const Product = () => {
         g: sizeGUnmasked,
       },
       photo_url,
-      photo_path: reference.fullPath,
+      photo_path: fullPath,
     };
 
     await helpers.addPizzaStorage(data as IAddPizzaStorage);

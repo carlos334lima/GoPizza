@@ -1,4 +1,5 @@
 //@libraries
+import storage from "@react-native-firebase/storage";
 import firestore from "@react-native-firebase/firestore";
 import { formatWithMask, Masks } from "react-native-mask-input";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
@@ -65,5 +66,22 @@ export const helpers = {
       .catch(() => {
         RenderMessageTop("Não foi possível cadastrar a pizza!", "danger");
       });
+  },
+
+  savePhotoUrl: async (image: string) => {
+    const fileName = `image${new Date().getTime()}`;
+    const reference = storage().ref(
+      `/${GO_PIZZA.STORAGE_FOLDER_IMAGE}/${fileName}.png`
+    );
+
+    await reference.putFile(image);
+    const photo_url = await reference.getDownloadURL();
+
+    const result = {
+      photo_url: photo_url,
+      fullPath: reference.fullPath,
+    };
+
+    return result;
   },
 };

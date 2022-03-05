@@ -1,6 +1,14 @@
-import { RenderMessageTop } from "@Components/MessageInfo";
-import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+//@libraries
+import firestore from "@react-native-firebase/firestore";
 import { formatWithMask, Masks } from "react-native-mask-input";
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+
+//@components
+import { RenderMessageTop } from "@Components/MessageInfo";
+
+//@utils
+import { GO_PIZZA } from "@Utils/Constants";
+import { IAddPizzaStorage } from "@Types/interfaces";
 
 export const helpers = {
   handleOpenLibrary: async () => {
@@ -13,7 +21,7 @@ export const helpers = {
       RenderMessageTop("Houve um erro em carregar sua imagem!", "danger");
     }
 
-    return assets[0]?.uri; 
+    return assets[0]?.uri;
   },
 
   handleOpenCamera: async () => {
@@ -45,5 +53,17 @@ export const helpers = {
     });
 
     return unmasked;
+  },
+
+  addPizzaStorage: async (data: IAddPizzaStorage) => {
+    firestore()
+      .collection(GO_PIZZA.COLLECTION_DATABASE)
+      .add(data)
+      .then(() => {
+        RenderMessageTop("Pizza cadastrada com sucesso!", "success");
+      })
+      .catch(() => {
+        RenderMessageTop("Não foi possível cadastrar a pizza!", "danger");
+      });
   },
 };

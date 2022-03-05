@@ -6,6 +6,26 @@ export type User = {
   isAdmin: boolean;
 };
 
+export type ProductProps = {
+  id: string;
+  photo_url: string;
+  name: string;
+  description: string;
+};
+
+export type IAddPizzaStorage = {
+  name: string;
+  name_insensitive: string;
+  description: string;
+  prices_sizes: {
+    p: string;
+    m: string;
+    g: string;
+  };
+  photo_url: string;
+  photo_path: string;
+};
+
 export enum TypeShowMessage {
   aviso = "warning",
   erro = "danger",

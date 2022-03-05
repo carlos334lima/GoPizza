@@ -13,6 +13,7 @@ import { AuthProvider } from "@Hooks/auth";
 
 //@style
 import Theme from "./src/Theme";
+import { Home } from "@Screens/Home";
 
 export default function App() {
   return (
@@ -23,7 +24,7 @@ export default function App() {
           barStyle={"light-content"}
           backgroundColor="transparent"
         />
-        <Product />
+        <Home />
       </ThemeProvider>
     </AuthProvider>
   );

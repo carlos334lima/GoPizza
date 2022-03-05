@@ -3,8 +3,6 @@ import {
   Platform,
   TouchableOpacity,
   ScrollView,
-  Alert,
-  View,
 } from "react-native";
 
 //@libraries
@@ -12,7 +10,6 @@ import { useForm } from "react-hook-form";
 import storage from "@react-native-firebase/storage";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FlashMessage from "react-native-flash-message";
-import firestore from "@react-native-firebase/firestore";
 
 //@components
 import { Photo } from "@Components/Photo";
@@ -20,12 +17,14 @@ import { Input } from "@Components/Input";
 import { InputPrice } from "@Components/InputPrice";
 import { Button } from "@Components/Buttons/Button";
 import { HideKeyboard } from "@Components/HideKeyboard";
+import { RenderMessageTop } from "@Components/MessageInfo";
 import { ButtonBack } from "@Components/Buttons/ButtonBack";
 import { OptionsImagePickerActionSheet } from "@Components/ActionSheet/OptionsImagePicker";
 
 //@utils
 import { helpers } from "@Utils/Helpers";
 import { schemaProduct } from "@Utils/Schemas";
+import { IAddPizzaStorage, ProductProps } from "@Types/interfaces";
 
 //@styles
 import {
@@ -39,7 +38,6 @@ import {
   InputGroup,
   Header,
 } from "./styles";
-import { RenderMessageTop } from "@Components/MessageInfo";
 
 type IForm = {
   description?: string;
@@ -73,12 +71,12 @@ const Product = () => {
 
   async function handlePressLoadLibraryPhotos() {
     const result = await helpers.handleOpenLibrary();
-    setImage(result);
-     optionsImagePickerActionSheetRef.current.hide(); 
+    setImage(result as string);
+    optionsImagePickerActionSheetRef.current.hide();
   }
 
   async function handlePressOpenCamera() {
-   /*  optionsImagePickerActionSheetRef.current.hide(); */
+    /*  optionsImagePickerActionSheetRef.current.hide(); */
     await helpers.handleOpenCamera();
   }
 
@@ -89,11 +87,11 @@ const Product = () => {
     sizeM,
     sizeP,
   }: IForm) {
-    const sizePUnmasked = helpers.formartUnmasked(sizeP);
-    const sizeMUnmasked = helpers.formartUnmasked(sizeM);
-    const sizeGUnmasked = helpers.formartUnmasked(sizeG);
+    const sizePUnmasked = helpers.formartUnmasked(sizeP as string);
+    const sizeMUnmasked = helpers.formartUnmasked(sizeM as string);
+    const sizeGUnmasked = helpers.formartUnmasked(sizeG as string);
 
-     if (!image) {
+    if (!image) {
       RenderMessageTop("Selecione uma imagem!", "danger");
       return;
     }
@@ -104,26 +102,20 @@ const Product = () => {
     await reference.putFile(image);
     const photo_url = await reference.getDownloadURL();
 
-    firestore()
-      .collection("pizzas")
-      .add({
-        name,
-        name_insensitive: name?.toLowerCase().trim(),
-        description,
-        prices_sizes: {
-          p: sizePUnmasked,
-          m: sizeMUnmasked,
-          g: sizeGUnmasked,
-        },
-        photo_url,
-        photo_path: reference.fullPath,
-      })
-      .then(() => {
-        RenderMessageTop("Pizza cadastrada com sucesso!", "success");
-      })
-      .catch(() => {
-        RenderMessageTop("Não foi possível cadastrar a pizza!", "danger");
-      }); 
+    const data = {
+      name,
+      name_insensitive: name?.toLowerCase().trim(),
+      description,
+      prices_sizes: {
+        p: sizePUnmasked,
+        m: sizeMUnmasked,
+        g: sizeGUnmasked,
+      },
+      photo_url,
+      photo_path: reference.fullPath,
+    };
+
+    await helpers.addPizzaStorage(data as IAddPizzaStorage);
   }
 
   return (

@@ -8,8 +8,8 @@ import React, {
 
 //@libraries
 import auth from "@react-native-firebase/auth";
-import { TypeShowMessage, User } from "@Types/interfaces";
 import firestore from "@react-native-firebase/firestore";
+import { TypeShowMessage, User } from "@Types/interfaces";
 
 //@components
 import { RenderMessageTop } from "@Components/MessageInfo";
@@ -23,11 +23,11 @@ import {
 } from "@Utils/LocalStorage";
 
 type AuthContextData = {
-  signIn: (email: string, password: string) => Promise<void>;
+  user: User | null;
   isLogging: boolean;
   signOut: () => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
-  user: User | null;
+  signIn: (email: string, password: string) => Promise<void>;
 };
 
 type AuthProviderProps = {
@@ -142,7 +142,6 @@ function AuthProvider({ children }: AuthProviderProps) {
 
 function useAuth() {
   const context = useContext(AuthContext);
-
   return context;
 }
 

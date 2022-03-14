@@ -13,7 +13,7 @@ type Props = TextInputProps & {
   onClear: () => void;
 };
 
-const Search = ({ onClear, onSearch, ...rest }: Props) => {
+const Search = ({ onClear, onSearch, value, ...rest }: Props) => {
   return (
     <Container>
       <InputArea>

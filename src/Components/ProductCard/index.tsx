@@ -1,5 +1,4 @@
 import React from "react";
-import { Image } from "react-native";
 
 //@libraries
 import Icon from "react-native-vector-icons/Feather";
@@ -15,24 +14,32 @@ import {
   Description,
   Details,
   Identification,
+  Image,
+  Line,
   Name,
 } from "./styles";
+import { RectButtonProps } from "react-native-gesture-handler";
 
-const ProductCard = ({ ...rest }: ProductProps) => {
+type IProps = RectButtonProps & {
+  data: ProductProps;
+}
+
+const ProductCard = ({data, ...rest}: IProps) => {
   return (
     <Container>
       <Content {...rest}>
-        <Image />
+        <Image source={{ uri: data.photo_url }}/>
 
         <Details>
           <Identification>
-            <Name>Margarita</Name>
+            <Name>{data.name}</Name>
             <Icon name="chevron-right" size={18} color={Theme.COLORS.SHAPE} />
           </Identification>
 
-          <Description>teste</Description>
+          <Description>{data.description}</Description>
         </Details>
-      </Content>
+      </Content> 
+      <Line />
     </Container>
   );
 };

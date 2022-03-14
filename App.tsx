@@ -4,16 +4,12 @@ import { StatusBar } from "react-native";
 //@libraries
 import { ThemeProvider } from "styled-components/native";
 
-//@screens
-import { SignIn } from "./src/Screens/SignIn";
-import { Product } from "@Screens/Product";
-
 //@utils
 import { AuthProvider } from "@Hooks/auth";
+import { Routes } from "@Utils/Navigation";
 
 //@style
 import Theme from "./src/Theme";
-import { Home } from "@Screens/Home";
 
 export default function App() {
   return (
@@ -24,7 +20,7 @@ export default function App() {
           barStyle={"light-content"}
           backgroundColor="transparent"
         />
-        <Home />
+        <Routes />
       </ThemeProvider>
     </AuthProvider>
   );

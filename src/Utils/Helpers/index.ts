@@ -9,7 +9,7 @@ import { RenderMessageTop } from "@Components/MessageInfo";
 
 //@utils
 import { GO_PIZZA } from "@Utils/Constants";
-import { IAddPizzaStorage } from "@Types/interfaces";
+import { IAddPizzaStorage, ProductProps } from "@Types/interfaces";
 
 export const helpers = {
   handleOpenLibrary: async () => {
@@ -84,4 +84,5 @@ export const helpers = {
 
     return result;
   },
+
 };

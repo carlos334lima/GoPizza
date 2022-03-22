@@ -1,6 +1,4 @@
-export type ProductNavigationProps = {
-  id?: string;
-};
+import { ProductNavigationProps } from "./interfaces";
 
 export type OrderNavigationProps = {
   id: string;

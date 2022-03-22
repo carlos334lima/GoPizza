@@ -19,8 +19,9 @@ import {
   Name,
 } from "./styles";
 import { RectButtonProps } from "react-native-gesture-handler";
+import { TouchableOpacityProps } from "react-native";
 
-type IProps = RectButtonProps & {
+type IProps = TouchableOpacityProps & {
   data: ProductProps;
 }
 

@@ -26,6 +26,19 @@ export type IAddPizzaStorage = {
   photo_path: string;
 };
 
+export type ProductNavigationProps = {
+  id?: string;
+};
+
+export type PizzaResponse = ProductProps & {
+  photo_path: string;
+  prices_sizes: {
+    p: string;
+    m: string;
+    g: string;
+  };
+};
+
 export enum TypeShowMessage {
   aviso = "warning",
   erro = "danger",

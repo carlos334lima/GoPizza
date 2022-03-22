@@ -5,7 +5,7 @@ export const Container = styled.View`
   width: 100%;
 `;
 
-export const Content = styled(RectButton)`
+export const Content = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
 `;

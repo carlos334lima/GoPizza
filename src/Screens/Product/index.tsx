@@ -3,7 +3,7 @@ import { Platform, TouchableOpacity, ScrollView } from "react-native";
 
 //@libraries
 import { useForm } from "react-hook-form";
-
+import { useRoute } from "@react-navigation/native";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FlashMessage from "react-native-flash-message";
 
@@ -53,18 +53,30 @@ type PizzaResponse = ProductProps & {
 };
 
 const Product = () => {
+  const route = useRoute();
+  const { data } = route.params as any;
   const {
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(schemaProduct),
+    defaultValues: {
+      name: data?.name,
+      description: data?.description,
+      sizeP: data?.sizeP,
+      sizeM: data?.sizeM,
+      sizeG: data?.sizeG,
+    }
   });
 
   const optionsImagePickerActionSheetRef = useRef<any | null>();
 
-  const [image, setImage] = useState<string>("");
+  console.log('data', data.photoPath)
 
+  const [image, setImage] = useState<string>(data?.image ? data?.image : "");
+
+ 
   async function handlePressLoadLibraryPhotos() {
     const result = await helpers.handleOpenLibrary();
     setImage(result as string);

@@ -2,7 +2,7 @@ import React from "react";
 import { TextInputProps } from "react-native";
 
 //@libraries
-import { Control, Controller, FieldValues } from "react-hook-form";
+import { Controller } from "react-hook-form";
 
 //@components
 import { RenderMessageTop } from "@Components/MessageInfo";
@@ -16,8 +16,8 @@ import { Container, Size, Label, Input } from "./styles";
 type Props = TextInputProps & {
   size: string;
   name: string;
-  error: string;
-  control: Control<FieldValues, object> | undefined;
+  error: any;
+  control: any;
 };
 
 export function InputPrice({ name, control, size, error, ...rest }: Props) {
@@ -29,19 +29,19 @@ export function InputPrice({ name, control, size, error, ...rest }: Props) {
         return (
           <>
             <Container error={error}>
-            <Size>
-              <Label>{size}</Label>
-            </Size>
+              <Size>
+                <Label>{size}</Label>
+              </Size>
 
-            <Input
-              placeholder="R$"
-              keyboardType="numeric"
-              onChangeText={onChange}
-              value={helpers.formartCurrentBR(value)}
-              {...rest}
-            />
-          </Container>
-             {error && RenderMessageTop(error, "danger")}
+              <Input
+                placeholder="R$"
+                keyboardType="numeric"
+                onChangeText={onChange}
+                value={helpers.formartCurrentBR(value)}
+                {...rest}
+              />
+            </Container>
+            {error && RenderMessageTop(error, "danger")}
           </>
         );
       }}

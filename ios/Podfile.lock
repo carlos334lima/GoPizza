@@ -782,6 +782,8 @@ PODS:
     - React-perflogger (= 0.67.2)
   - RNCAsyncStorage (1.15.17):
     - React-Core
+  - RNCMaskedView (0.1.11):
+    - React
   - RNFBApp (13.1.1):
     - Firebase/CoreOnly (= 8.10.0)
     - React-Core
@@ -895,6 +897,7 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
@@ -1005,6 +1008,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCMaskedView:
+    :path: "../node_modules/@react-native-community/masked-view"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBAuth:
@@ -1087,6 +1092,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 2450b43df7ffe8e805a0b3dcb2abd4282f1f1836
   ReactCommon: d98c6c96b567f9b3a15f9fd4cc302c1eda8e3cf2
   RNCAsyncStorage: 105173940b40e85e274023966567ac11b7683cf8
+  RNCMaskedView: f127cd9652acfa31b91dcff613e07ba18b774db6
   RNFBApp: 6e20f07b316346d96737191f377777f61f51a8d2
   RNFBAuth: e2ba12680f849537c643e049df5f0d0d4f1b0ee1
   RNFBFirestore: 1629b5e89bdab92493fdc0e88753a9089ef13940

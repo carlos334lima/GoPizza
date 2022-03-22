@@ -4,7 +4,7 @@ import { FlatList, TouchableOpacity } from "react-native";
 //@libraries
 import firestore from "@react-native-firebase/firestore";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 //@components
 import { Search } from "@Components/Search";
@@ -16,7 +16,7 @@ import { RenderMessageTop } from "@Components/MessageInfo";
 import happyEmoji from "@Assets/happy.png";
 
 //@utils
-import { ProductProps } from "@Types/interfaces";
+import { PizzaResponse, ProductProps } from "@Types/interfaces";
 
 //@styles
 import Theme from "@Theme/index";
@@ -30,8 +30,14 @@ import {
   MenuItemsNumber,
   Title,
 } from "./styles";
+import { helpers } from "@Utils/Helpers";
+import { useAuth } from "@Hooks/auth";
+import { GO_PIZZA } from "@Utils/Constants";
 
 const Home = () => {
+  const { user } = useAuth();
+
+  const { navigate } = useNavigation();
   const [search, setSearch] = useState("");
   const [pizzas, setPizzas] = useState<ProductProps[]>([]);
 
@@ -43,7 +49,7 @@ const Home = () => {
     const formattedValue = search.toLocaleLowerCase().trim();
 
     firestore()
-      .collection("pizzas")
+      .collection(GO_PIZZA.COLLECTION_DATABASE)
       .orderBy("name_insensitive")
       .startAt(formattedValue)
       .endAt(`${formattedValue}\uf8ff`)
@@ -71,7 +77,32 @@ const Home = () => {
     fetchPizzas("");
   }
 
-  function handleOpen(id: string) {}
+  async function handleOpen(id: string) {
+    if (id) {
+      firestore()
+        .collection(GO_PIZZA.COLLECTION_DATABASE)
+        .doc(id)
+        .get()
+        .then((response) => {
+          const product = response.data() as PizzaResponse;
+
+          const data = {
+            name: product.name,
+            image: product.photo_url,
+            description: product.description,
+            photoPath: product.photo_path,
+            sizeP: product.prices_sizes.p,
+            sizeM: product.prices_sizes.m,
+            sizeG: product.prices_sizes.g,
+          };
+
+          const route = user?.isAdmin ? "Product" : "order";
+          navigate(route, { data });
+        }).catch(() => {
+          RenderMessageTop("Não foi possível realizar a consulta!", "danger");
+        });
+    }
+  }
 
   return (
     <Container>
@@ -95,7 +126,7 @@ const Home = () => {
 
       <MenuHeader>
         <Title>Cardápio</Title>
-        <MenuItemsNumber>10 pizzas</MenuItemsNumber>
+        <MenuItemsNumber>{pizzas.length} pizzas</MenuItemsNumber>
       </MenuHeader>
 
       <FlatList

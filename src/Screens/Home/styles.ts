@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components/native";
 import LinearGradient from "react-native-linear-gradient";
 import { getBottomSpace, getStatusBarHeight } from "react-native-iphone-x-helper";
+import { Button } from "@Components/Buttons/Button";
 
 
 export const Container = styled.View`
@@ -62,7 +63,7 @@ export const Title = styled.Text`
   `};
 `;
 
-/* export const NewProductButton = styled(Button)`
+ export const NewProductButton = styled(Button)`
   margin: 0 24px;
   margin-bottom: ${getBottomSpace() + 12}px;
-`; */
+`; 

@@ -3,7 +3,7 @@ import { Platform, TouchableOpacity, ScrollView } from "react-native";
 
 //@libraries
 import { useForm } from "react-hook-form";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FlashMessage from "react-native-flash-message";
 
@@ -54,7 +54,11 @@ type PizzaResponse = ProductProps & {
 
 const Product = () => {
   const route = useRoute();
+  const { goBack } = useNavigation();
+  const optionsImagePickerActionSheetRef = useRef<any | null>();
+
   const { data } = route.params as any;
+
   const {
     control,
     handleSubmit,
@@ -67,16 +71,11 @@ const Product = () => {
       sizeP: data?.sizeP,
       sizeM: data?.sizeM,
       sizeG: data?.sizeG,
-    }
+    },
   });
-
-  const optionsImagePickerActionSheetRef = useRef<any | null>();
-
-  console.log('data', data.photoPath)
 
   const [image, setImage] = useState<string>(data?.image ? data?.image : "");
 
- 
   async function handlePressLoadLibraryPhotos() {
     const result = await helpers.handleOpenLibrary();
     setImage(result as string);
@@ -121,25 +120,29 @@ const Product = () => {
     await helpers.addPizzaStorage(data as IAddPizzaStorage);
   }
 
+  const isNewPizza = data?.name ? false : true;
+
   return (
     <HideKeyboard>
       <Container behavior={Platform.OS === "ios" ? "padding" : undefined}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <Header>
-            <ButtonBack />
+            <ButtonBack onPress={() => goBack()} />
             <Title>Cadastrar</Title>
             <TouchableOpacity>
-              <DeleteLabel>Deletar</DeleteLabel>
+              {!isNewPizza && <DeleteLabel>Deletar</DeleteLabel>}
             </TouchableOpacity>
           </Header>
 
           <Upload>
             <Photo uri={image} />
-            <PickImageButton
-              title="Carregar"
-              type="secondary"
-              onPress={() => optionsImagePickerActionSheetRef.current.show()}
-            />
+            {isNewPizza && (
+              <PickImageButton
+                title="Carregar"
+                type="secondary"
+                onPress={() => optionsImagePickerActionSheetRef.current.show()}
+              />
+            )}
           </Upload>
 
           <Form>
@@ -187,11 +190,13 @@ const Product = () => {
               />
             </InputGroup>
 
-            <Button
-              title="Cadastrar Pizza"
-              onPress={handleSubmit(handleAddPizza)}
-              isLoading={isSubmitting}
-            />
+            {isNewPizza && (
+              <Button
+                title="Cadastrar Pizza"
+                onPress={handleSubmit(handleAddPizza)}
+                isLoading={isSubmitting}
+              />
+            )}
           </Form>
         </ScrollView>
 

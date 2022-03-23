@@ -16,6 +16,8 @@ import { RenderMessageTop } from "@Components/MessageInfo";
 import happyEmoji from "@Assets/happy.png";
 
 //@utils
+import { useAuth } from "@Hooks/auth";
+import { GO_PIZZA } from "@Utils/Constants";
 import { PizzaResponse, ProductProps } from "@Types/interfaces";
 
 //@styles
@@ -28,11 +30,10 @@ import {
   Header,
   MenuHeader,
   MenuItemsNumber,
+  NewProductButton,
   Title,
 } from "./styles";
-import { helpers } from "@Utils/Helpers";
-import { useAuth } from "@Hooks/auth";
-import { GO_PIZZA } from "@Utils/Constants";
+
 
 const Home = () => {
   const { user } = useAuth();
@@ -40,6 +41,7 @@ const Home = () => {
   const { navigate } = useNavigation();
   const [search, setSearch] = useState("");
   const [pizzas, setPizzas] = useState<ProductProps[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchPizzas("");
@@ -68,17 +70,22 @@ const Home = () => {
       });
   }
 
-  async function handleSearch() {
+  function handleSearch() {
     fetchPizzas(search);
   }
 
-  async function handleSearchClear() {
+  function handleSearchClear() {
     setSearch("");
     fetchPizzas("");
   }
 
+  function handleAdd() {
+    navigate("Product", {});
+  }
+
   async function handleOpen(id: string) {
     if (id) {
+      setLoading(true);
       firestore()
         .collection(GO_PIZZA.COLLECTION_DATABASE)
         .doc(id)
@@ -87,6 +94,7 @@ const Home = () => {
           const product = response.data() as PizzaResponse;
 
           const data = {
+            id: product.id,
             name: product.name,
             image: product.photo_url,
             description: product.description,
@@ -98,8 +106,12 @@ const Home = () => {
 
           const route = user?.isAdmin ? "Product" : "order";
           navigate(route, { data });
-        }).catch(() => {
+        })
+        .catch(() => {
           RenderMessageTop("Não foi possível realizar a consulta!", "danger");
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   }
@@ -133,7 +145,11 @@ const Home = () => {
         data={pizzas}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <ProductCard data={item} onPress={() => handleOpen(item.id)} />
+          <ProductCard
+            data={item}
+            onPress={() => handleOpen(item.id)}
+            loading={loading}
+          />
         )}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={() => (
@@ -145,6 +161,14 @@ const Home = () => {
           marginHorizontal: 24,
         }}
       />
+
+      {user?.isAdmin && (
+        <NewProductButton
+          title="Cadastrar Pizza"
+          type="secondary"
+          onPress={handleAdd}
+        />
+      )}
     </Container>
   );
 };

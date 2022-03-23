@@ -84,6 +84,6 @@ export const helpers = {
     };
 
     return result;
-  }
+  },
 
 };

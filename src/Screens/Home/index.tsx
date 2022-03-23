@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, TouchableOpacity } from "react-native";
 
 //@libraries
@@ -34,18 +34,19 @@ import {
   Title,
 } from "./styles";
 
-
 const Home = () => {
   const { user } = useAuth();
-
   const { navigate } = useNavigation();
+
   const [search, setSearch] = useState("");
   const [pizzas, setPizzas] = useState<ProductProps[]>([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetchPizzas("");
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchPizzas("");
+    }, [])
+  );
 
   async function fetchPizzas(value: string) {
     const formattedValue = search.toLocaleLowerCase().trim();
@@ -94,7 +95,7 @@ const Home = () => {
           const product = response.data() as PizzaResponse;
 
           const data = {
-            id: product.id,
+            id: id,
             name: product.name,
             image: product.photo_url,
             description: product.description,

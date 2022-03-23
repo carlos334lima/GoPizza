@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Platform, TouchableOpacity, ScrollView } from "react-native";
 
 //@libraries
 import { useForm } from "react-hook-form";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import storage from "@react-native-firebase/storage";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FlashMessage from "react-native-flash-message";
+import firestore from "@react-native-firebase/firestore";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 //@components
 import { Photo } from "@Components/Photo";
@@ -34,6 +36,7 @@ import {
   InputGroup,
   Header,
 } from "./styles";
+import { GO_PIZZA } from "@Utils/Constants";
 
 type IForm = {
   description?: string;
@@ -54,7 +57,7 @@ type PizzaResponse = ProductProps & {
 
 const Product = () => {
   const route = useRoute();
-  const { goBack } = useNavigation();
+  const { goBack, navigate } = useNavigation();
   const optionsImagePickerActionSheetRef = useRef<any | null>();
 
   const { data } = route.params as any;
@@ -118,6 +121,21 @@ const Product = () => {
     };
 
     await helpers.addPizzaStorage(data as IAddPizzaStorage);
+
+    navigate('Home')
+  }
+
+  function handleDelete() {
+    firestore()
+      .collection(GO_PIZZA.COLLECTION_DATABASE)
+      .doc(data.id)
+      .delete()
+      .then(() => {
+        storage()
+          .ref(data.photoPath)
+          .delete()
+          .then(() => navigate("Home"));
+      });
   }
 
   const isNewPizza = data?.name ? false : true;
@@ -129,9 +147,11 @@ const Product = () => {
           <Header>
             <ButtonBack onPress={() => goBack()} />
             <Title>Cadastrar</Title>
-            <TouchableOpacity>
-              {!isNewPizza && <DeleteLabel>Deletar</DeleteLabel>}
-            </TouchableOpacity>
+            {!isNewPizza && (
+              <TouchableOpacity onPress={handleDelete}>
+                <DeleteLabel>Deletar</DeleteLabel>
+              </TouchableOpacity>
+            )}
           </Header>
 
           <Upload>
